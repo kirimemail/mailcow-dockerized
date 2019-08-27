@@ -46,7 +46,7 @@ function mailbox($_action, $_type, $_data = null, $_extra = null) {
           $stmt = $pdo->prepare("SELECT `domain` FROM `mailbox` WHERE `username` = :username");
           $stmt->execute(array(':username' => $_SESSION['mailcow_cc_username']));
           $domain = $stmt->fetch(PDO::FETCH_ASSOC)['domain'];
-          $validity = strtotime("+".$_data["validity"]." hour"); 
+          $validity = strtotime("+".$_data["validity"]." hour");
           $letters = 'abcefghijklmnopqrstuvwxyz1234567890';
           $random_name = substr(str_shuffle($letters), 0, 24);
           $stmt = $pdo->prepare("INSERT INTO `spamalias` (`address`, `goto`, `validity`) VALUES
@@ -480,7 +480,7 @@ function mailbox($_action, $_type, $_data = null, $_extra = null) {
               'msg' => 'comment_too_long'
             );
             return false;
-          } 
+          }
           if (empty($addresses[0])) {
             $_SESSION['return'][] = array(
               'type' => 'danger',
@@ -1226,7 +1226,7 @@ function mailbox($_action, $_type, $_data = null, $_extra = null) {
                 'msg' => 'access_denied'
               );
               continue;
-            } 
+            }
             $stmt = $pdo->prepare("UPDATE `mailbox`
               SET `attributes` = JSON_SET(`attributes`, '$.quarantine_notification', :quarantine_notification)
                 WHERE `username` = :username");
@@ -2045,7 +2045,7 @@ function mailbox($_action, $_type, $_data = null, $_extra = null) {
               $domain     = $is_now['domain'];
               $quota_b    = $quota_m * 1048576;
               $password   = (!empty($_data['password'])) ? $_data['password'] : null;
-              $password2  = (!empty($_data['password2'])) ? $_data['password2'] : null; 
+              $password2  = (!empty($_data['password2'])) ? $_data['password2'] : null;
             }
             else {
               $_SESSION['return'][] = array(
@@ -2860,9 +2860,11 @@ function mailbox($_action, $_type, $_data = null, $_extra = null) {
             `created`,
             `modified`
               FROM `alias`
-                  WHERE `id` = :id AND `address` != `goto`");
+                  WHERE (`id` = :id OR `address` = :address) AND `address` != `goto`");
+          //TODO: fix search alias
           $stmt->execute(array(
             ':id' => intval($_data),
+              ':data'=> $_data,
           ));
           $row = $stmt->fetch(PDO::FETCH_ASSOC);
           $stmt = $pdo->prepare("SELECT `target_domain` FROM `alias_domain` WHERE `alias_domain` = :domain");
@@ -2978,7 +2980,7 @@ function mailbox($_action, $_type, $_data = null, $_extra = null) {
             ':domain' => $_data
           ));
           $row = $stmt->fetch(PDO::FETCH_ASSOC);
-          if (empty($row)) { 
+          if (empty($row)) {
             return false;
           }
           $stmt = $pdo->prepare("SELECT COUNT(*) AS `count`,
@@ -3606,7 +3608,7 @@ function mailbox($_action, $_type, $_data = null, $_extra = null) {
               curl_setopt($curl, CURLOPT_HTTPHEADER,array('Content-Type: text/xml'));
               curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
               curl_setopt($curl, CURLOPT_POST, 1);
-              curl_setopt($curl, CURLOPT_POSTFIELDS, '<delete><query>user:' . $username . '</query></delete>'); 
+              curl_setopt($curl, CURLOPT_POSTFIELDS, '<delete><query>user:' . $username . '</query></delete>');
               curl_setopt($curl, CURLOPT_TIMEOUT, 30);
               $response = curl_exec($curl);
               if ($response === false) {

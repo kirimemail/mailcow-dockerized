@@ -53,6 +53,11 @@ function api_log($_data) {
   }
 }
 
+// TODO: additional parameter
+function getDomainParameter(){
+    return isset($_GET['domain']) ? $_GET['domain']: null;
+}
+
 if (isset($_SESSION['mailcow_cc_role']) || isset($_SESSION['pending_mailcow_cc_username'])) {
   if (isset($_GET['query'])) {
 
@@ -563,26 +568,39 @@ if (isset($_SESSION['mailcow_cc_role']) || isset($_SESSION['pending_mailcow_cc_u
           case "mailbox":
             switch ($object) {
               case "all":
-                $domains = mailbox('get', 'domains');
-                if (!empty($domains)) {
-                  foreach ($domains as $domain) {
-                    $mailboxes = mailbox('get', 'mailboxes', $domain);
-                    if (!empty($mailboxes)) {
-                      foreach ($mailboxes as $mailbox) {
-                        if ($details = mailbox('get', 'mailbox_details', $mailbox)) {
-                          $data[] = $details;
-                        }
-                        else {
-                          continue;
-                        }
+                  $domain = getDomainParameter();
+                  if($domain==null) {
+                      $domains = mailbox('get', 'domains');
+                      if (!empty($domains)) {
+                          foreach ($domains as $domain) {
+                              $mailboxes = mailbox('get', 'mailboxes', $domain);
+                              if (!empty($mailboxes)) {
+                                  foreach ($mailboxes as $mailbox) {
+                                      if ($details = mailbox('get', 'mailbox_details', $mailbox)) {
+                                          $data[] = $details;
+                                      } else {
+                                          continue;
+                                      }
+                                  }
+                              }
+                          }
+                          process_get_return($data);
+                      } else {
+                          echo '{}';
                       }
-                    }
+                  }else{
+                      $mailboxes = mailbox('get', 'mailboxes', $domain);
+                      if (!empty($mailboxes)) {
+                          foreach ($mailboxes as $mailbox) {
+                              if ($details = mailbox('get', 'mailbox_details', $mailbox)) {
+                                  $data[] = $details;
+                              } else {
+                                  continue;
+                              }
+                          }
+                      }
+                      process_get_return($data);
                   }
-                  process_get_return($data);
-                }
-                else {
-                  echo '{}';
-                }
               break;
 
               default:
@@ -902,26 +920,39 @@ if (isset($_SESSION['mailcow_cc_role']) || isset($_SESSION['pending_mailcow_cc_u
           case "alias":
             switch ($object) {
               case "all":
-                $domains = array_merge(mailbox('get', 'domains'), mailbox('get', 'alias_domains'));
-                if (!empty($domains)) {
-                  foreach ($domains as $domain) {
-                    $aliases = mailbox('get', 'aliases', $domain);
-                    if (!empty($aliases)) {
-                      foreach ($aliases as $alias) {
-                        if ($details = mailbox('get', 'alias_details', $alias)) {
-                          $data[] = $details;
-                        }
-                        else {
-                          continue;
-                        }
+                  $domain = getDomainParameter();
+                  if($domain==null) {
+                      $domains = array_merge(mailbox('get', 'domains'), mailbox('get', 'alias_domains'));
+                      if (!empty($domains)) {
+                          foreach ($domains as $domain) {
+                              $aliases = mailbox('get', 'aliases', $domain);
+                              if (!empty($aliases)) {
+                                  foreach ($aliases as $alias) {
+                                      if ($details = mailbox('get', 'alias_details', $alias)) {
+                                          $data[] = $details;
+                                      } else {
+                                          continue;
+                                      }
+                                  }
+                              }
+                          }
+                          process_get_return($data);
+                      } else {
+                          echo '{}';
                       }
-                    }
+                  }else{
+                      $aliases = mailbox('get', 'aliases', $domain);
+                      if (!empty($aliases)) {
+                          foreach ($aliases as $alias) {
+                              if ($details = mailbox('get', 'alias_details', $alias)) {
+                                  $data[] = $details;
+                              } else {
+                                  continue;
+                              }
+                          }
+                      }
+                      process_get_return($data);
                   }
-                  process_get_return($data);
-                }
-                else {
-                  echo '{}';
-                }
               break;
 
               default:
@@ -1217,7 +1248,7 @@ if (isset($_SESSION['mailcow_cc_role']) || isset($_SESSION['pending_mailcow_cc_u
           break;
           case "filter":
             process_edit_return(mailbox('edit', 'filter', array_merge(array('id' => $items), $attr)));
-          break;          
+          break;
           case "resource":
             process_edit_return(mailbox('edit', 'resource', array_merge(array('name' => $items), $attr)));
           break;
