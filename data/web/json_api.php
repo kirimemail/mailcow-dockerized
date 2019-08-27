@@ -1349,9 +1349,6 @@ if (isset($_SESSION['mailcow_cc_role']) || isset($_SESSION['pending_mailcow_cc_u
           case "recipient_map":
             process_edit_return(recipient_map('edit', array_merge(array('id' => $items), $attr)));
           break;
-          case "app-passwd":
-            process_edit_return(app_passwd('edit', array_merge(array('id' => $items), $attr)));
-          break;
           case "tls-policy-map":
             process_edit_return(tls_policy_maps('edit', array_merge(array('id' => $items), $attr)));
           break;
