@@ -2864,7 +2864,7 @@ function mailbox($_action, $_type, $_data = null, $_extra = null) {
           //TODO: fix search alias
           $stmt->execute(array(
             ':id' => intval($_data),
-              ':data'=> $_data,
+              ':address'=> $_data,
           ));
           $row = $stmt->fetch(PDO::FETCH_ASSOC);
           $stmt = $pdo->prepare("SELECT `target_domain` FROM `alias_domain` WHERE `alias_domain` = :domain");
