@@ -53,11 +53,6 @@ function api_log($_data) {
   }
 }
 
-// TODO: additional parameter
-function getDomainParameter(){
-    return isset($_GET['domain']) ? $_GET['domain']: null;
-}
-
 if (isset($_SESSION['mailcow_cc_role']) || isset($_SESSION['pending_mailcow_cc_username'])) {
   if (isset($_GET['query'])) {
 
@@ -568,7 +563,7 @@ if (isset($_SESSION['mailcow_cc_role']) || isset($_SESSION['pending_mailcow_cc_u
           case "mailbox":
             switch ($object) {
               case "all":
-                  $domain = getDomainParameter();
+                  $domain = $extra;
                   if($domain==null) {
                       $domains = mailbox('get', 'domains');
                       if (!empty($domains)) {
@@ -920,7 +915,7 @@ if (isset($_SESSION['mailcow_cc_role']) || isset($_SESSION['pending_mailcow_cc_u
           case "alias":
             switch ($object) {
               case "all":
-                  $domain = getDomainParameter();
+                  $domain = $extra;
                   if($domain==null) {
                       $domains = array_merge(mailbox('get', 'domains'), mailbox('get', 'alias_domains'));
                       if (!empty($domains)) {
