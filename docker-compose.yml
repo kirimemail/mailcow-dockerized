@@ -197,8 +197,8 @@ services:
         - ./data/assets/ssl:/etc/ssl/mail/:ro
         - ./data/conf/sogo/:/etc/sogo/
         - ./data/conf/phpfpm/sogo-sso/:/etc/phpfpm/
-        - vmail-vol-1:/var/vmail
-        - vmail-attachments-vol-1:/var/attachments
+        - /mnt/vol/mail:/var/vmail
+        - /mnt/vol/attachment:/var/attachments
         - crypt-vol-1:/mail_crypt/
         - ./data/conf/rspamd/custom/:/etc/rspamd/custom
         - ./data/assets/templates:/templates
