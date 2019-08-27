@@ -562,7 +562,8 @@ if (isset($_SESSION['mailcow_cc_role']) || isset($_SESSION['pending_mailcow_cc_u
           break;
           case "mailbox":
             switch ($object) {
-              case "all":
+                case "all":
+                  //TODO : fix search by domain
                   $domain = $extra;
                   if($domain==null) {
                       $domains = mailbox('get', 'domains');
@@ -914,7 +915,8 @@ if (isset($_SESSION['mailcow_cc_role']) || isset($_SESSION['pending_mailcow_cc_u
           break;
           case "alias":
             switch ($object) {
-              case "all":
+                case "all":
+                  // TODO: fix search by domain
                   $domain = $extra;
                   if($domain==null) {
                       $domains = array_merge(mailbox('get', 'domains'), mailbox('get', 'alias_domains'));
