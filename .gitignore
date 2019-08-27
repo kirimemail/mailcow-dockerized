@@ -10,7 +10,7 @@ data/conf/postfix/sql
 data/conf/postfix/allow_mailcow_local.regexp
 data/conf/dovecot/sql
 data/conf/nextcloud-*.bak
-data/web/inc/vars.local.inc.php
+#data/web/inc/vars.local.inc.php
 data/assets/ssl/*
 .vscode/*
 data/web/.well-known/acme-challenge
